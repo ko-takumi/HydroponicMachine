@@ -3,7 +3,8 @@
 import Builder
 
 def main():
-	Builder.Builder()
+	builder = Builder.Builder()
+	
 
 if __name__ == "__main__":
 	main()

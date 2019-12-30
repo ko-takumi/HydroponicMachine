@@ -7,6 +7,10 @@ class Builder(object):
 	def __new__(self):
 		if self.__mInstance == None:
 			self.__mInstance = super(Builder, self).__new__(self)
+			self.__mInstance.__create()
 		return self.__mInstance
+
+	def __create(self):
+		pass
 
 Builder()
