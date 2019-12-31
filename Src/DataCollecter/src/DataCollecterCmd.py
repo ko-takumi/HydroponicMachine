@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+DATA_CMD_NONE = ""
+DATA_CMD_SET_TEMP = "DATA_CMD_SET_TEMP"
+DATA_CMD_GET_TEMP = "DATA_CMD_GET_TEMP"
+DATA_CMD_QUIT = "DATA_CMD_QUIT"
