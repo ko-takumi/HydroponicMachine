@@ -4,6 +4,7 @@ import time
 import threading
 from . import TemperatureCmd as Cmd
 from . import TemperatureIO
+import LogPrint as LOG
 
 class TemperatureMain(threading.Thread):
 	__mCommand	= []
@@ -16,20 +17,16 @@ class TemperatureMain(threading.Thread):
 		self.__mSensor = TemperatureIO.TemperatureIO()
 
 	def run(self):
-		print("TemperatureMain start. [", id(self), "]")
+		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
-		while True:
-			print("---> TemperatureMain")
-			
+		while True:			
 			self.__executeCommand()
 
 			# 温度取得/格納
 			value = self.__mSensor.get()
 			self.__mDataApi.setTemperature(value)
 
-			self.__mDataApi.getTemperature(None)
-			time.sleep(1)
-			
+			time.sleep(10)
 
 	def notifyCommand(self, cmd, param):
 		self.__mCommand.append(cmd)
@@ -42,8 +39,8 @@ class TemperatureMain(threading.Thread):
 		cmd = self.__mCommand.pop(0)
 		param = self.__mParam.pop(0)
 		if cmd == Cmd.TEMP_CMD_QUIT:
-			print("--> TemperatureMain QUIT.[", param, "]")
+			LOG.INFO(__name__, "Thread QUIT. [{}]".format(hex(id(self))))
 			quit()
 
 		else:
-			print("Cmd Error.")
+			LOG.ERROR(__name__, "{} {}".format(cmd, param))

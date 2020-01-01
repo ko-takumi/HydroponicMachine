@@ -3,6 +3,7 @@
 import time
 import threading
 from Pump.api import PumpAPI
+import LogPrint as LOG
 
 class MainController(threading.Thread):
 	def __init__(self):
@@ -10,10 +11,9 @@ class MainController(threading.Thread):
 		self.__mApiPump	= PumpAPI.PumpAPI()
 
 	def run(self):
-		print("MainController start. [", id(self), "]")
+		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
 		while True:
-			print("---> MainController")
 			time.sleep(1)
 
 			#self.__mApiPump.threadEnd()

@@ -2,22 +2,29 @@
 # -*- coding: utf-8 -*-
 import time
 import threading
-from . import DisplayCmd as Cmd
-from . import DisplayProcess
+import Builder
+from . import MenuControllerCb
+from . import MenuControllerCmd as Cmd
+from . import MenuControllerProcess
 import LogPrint as LOG
 
-class DisplayMain(threading.Thread):
+class MenuController(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
 	__mProcess	= None
-
-	def __init__(self, dataObj):
+	
+	def __init__(self):
 		threading.Thread.__init__(self)
-		self.__mDataApi = dataObj
-		self.__mProcess = DisplayProcess.DisplayProcess(self.__mDataApi)
+		self.__mProcess		= MenuControllerProcess.MenuControllerProcess()
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
+		cb = MenuControllerCb.MenuControllerCb(self)
+
+		# 温度変更通知を登録
+		builder = Builder.Builder()
+		dataApi = builder.getDataCollecterAPI()
+		dataApi.registerChangeTemprature(cb.getTemperatureCb)
 
 		while True:
 			# コマンド実行
@@ -26,7 +33,7 @@ class DisplayMain(threading.Thread):
 			# 周期実行
 			self.__mProcess.execute()
 
-			time.sleep(0.5)
+			time.sleep(1)
 
 	def notifyCommand(self, cmd, param):
 		self.__mCommand.append(cmd)
@@ -38,14 +45,12 @@ class DisplayMain(threading.Thread):
 
 		cmd = self.__mCommand.pop(0)
 		param = self.__mParam.pop(0)
-		if cmd == Cmd.DISPLAY_CMD_QUIT:
+		if cmd == Cmd.MENU_CMD_QUIT:
 			LOG.INFO(__name__, "Thread QUIT. [{}]".format(hex(id(self))))
 			quit()
 
-		elif cmd == Cmd.DISPLAY_CMD_NOTIFY_TEMP:
-			LOG.INFO(__name__, "{}: {}".format(cmd, param))
-			self.__mProcess.notifyTemperature(param[0])
+		elif cmd == Cmd.MENU_CMD_GET_TEMP:
+			self.__mProcess.updataTemperature(param[0])
 
 		else:
 			LOG.ERROR(__name__, "{} {}".format(cmd, param))
-			

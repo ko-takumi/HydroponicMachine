@@ -3,6 +3,7 @@
 import time
 import threading
 from . import SwitchCmd as Cmd
+import LogPrint as LOG
 
 class SwitchMain(threading.Thread):
 	__mCommand	= []
@@ -12,7 +13,7 @@ class SwitchMain(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def run(self):
-		print("SwitchMain start. [", id(self), "]")
+		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
 		while True:
 			self.__executeCommand()

@@ -18,12 +18,9 @@ class SQLController(object):
 			conect.execute('''CREATE TABLE wateringLogs(id INTEGER, history TEXT)''')
 			conect.execute('''CREATE TABLE temperatureLogs(id INTEGER, history TEXT, temperature REAL)''')
 			self.mDb.commit()
-			conect.close() 
-
+			conect.close()
 
 	def execute(self, sql, data):
-		print(sql)
-		print(data)
 		try:
 			self.mDb = sqlite3.connect(DEF_DBNAME)
 			conect = self.mDb.cursor()

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import Builder
 from ..src import DataCollecterCmd as Cmd
+import LogPrint as LOG
 
 class DataCollecterAPI(object):
 	def __init__(self):
@@ -12,15 +13,17 @@ class DataCollecterAPI(object):
 		pass
 
 	def setTemperature(self, value):
-		print("setTemperature--> ", value)
-		print(self.__mMain)
+		LOG.INFO(__name__, "DATA_CMD_SET_TEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_TEMP, [value])
 
 	def getTemperature(self, cb):
-		print("getTemperature--> ", cb)
-		print(self.__mMain)
-		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_TEMP, [None])
+		LOG.INFO(__name__, "DATA_CMD_GET_TEMP.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_TEMP, [cb])
+
+	def registerChangeTemprature(self, cb):
+		LOG.INFO(__name__, "DATA_CMD_REG_CHANGETEMP.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_REG_CHANGETEMP, [cb])
 
 	def threadEnd(self):
-		print("--> DisplayAPI Stop.")
+		LOG.INFO(__name__, "DISPLAY_CMD_QUIT.")
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_QUIT, None)

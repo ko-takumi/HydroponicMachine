@@ -11,6 +11,9 @@ class DisplayAPI(object):
 	def __del__(self):
 		pass
 
+	def notifyTemperature(self, value):
+		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_TEMP, value)
+
 	def threadEnd(self):
 		print("--> DisplayAPI Stop.")
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_QUIT, None)

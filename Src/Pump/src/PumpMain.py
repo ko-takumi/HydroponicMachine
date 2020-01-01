@@ -3,6 +3,7 @@
 import time
 import threading
 from . import PumpCmd as Cmd
+import LogPrint as LOG
 
 class PumpMain(threading.Thread):
 	__mCommand	= []
@@ -12,7 +13,7 @@ class PumpMain(threading.Thread):
 		threading.Thread.__init__(self)
 
 	def run(self):
-		print("PumpMain start. [", id(self), "]")
+		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
 		while True:
 			self.__executeCommand()

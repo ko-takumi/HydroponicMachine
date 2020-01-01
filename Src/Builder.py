@@ -4,7 +4,7 @@ from Temperature.src import TemperatureMain
 from DataCollecter.src import DataCollecterMain
 from DataCollecter.api import DataCollecterAPI
 from Switch.src import SwitchMain
-from Display.src import DisplayMain
+from Display.src import DisplayMain, DisplayCb
 from Pump.src import PumpMain
 
 class Builder(object):
@@ -16,6 +16,8 @@ class Builder(object):
 	__mPumpThread			= None
 
 	__mDataCollecterAPI		= None
+
+	__mDisplayCb			= None
 
 	def __new__(self):
 		if self.__mInstance == None:
@@ -29,8 +31,11 @@ class Builder(object):
 
 		self.__mTemperatureThread	= TemperatureMain.TemperatureMain(self.__mDataCollecterAPI)
 		self.__mSwitchThread		= SwitchMain.SwitchMain()
-		self.__mDisplayThread		= DisplayMain.DisplayMain()
+		self.__mDisplayThread		= DisplayMain.DisplayMain(self.__mDataCollecterAPI)
 		self.__mPumpThread			= PumpMain.PumpMain()
+
+		# CBクラス作成
+		self.__mDisplayCb	= DisplayCb.DisplayCb(self.__mDisplayThread)
 
 	def getThreads(self):
 		threadList = [self.__mTemperatureThread, self.__mDataCollecterThread, self.__mSwitchThread, self.__mDisplayThread, self.__mPumpThread]
@@ -45,10 +50,16 @@ class Builder(object):
 	def getDisplayMain(self):
 		return self.__mDisplayThread
 
+	def getDisplayCb(self):
+		return self.__mDisplayCb
+
 	def getPumpMain(self):
 		return self.__mPumpThread
 
 	def getDataCollecterMain(self):
 		return self.__mDataCollecterThread
+
+	def getDataCollecterAPI(self):
+		return self.__mDataCollecterAPI
 
 Builder()
