@@ -11,3 +11,6 @@ class DisplayProcess(object):
 
 	def notifyTemperature(self, value):
 		LOG.INFO(__name__, "TEMP[{}]".format(value))
+
+	def notifyIPAddress(self, ip):
+		LOG.INFO(__name__, "IP-ADDRESS[{}]".format(ip))

@@ -33,7 +33,7 @@ class MenuController(threading.Thread):
 			# 周期実行
 			self.__mProcess.execute()
 
-			time.sleep(1)
+			time.sleep(0.5)
 
 	def notifyCommand(self, cmd, param):
 		self.__mCommand.append(cmd)
