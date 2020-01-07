@@ -4,7 +4,7 @@ import sqlite3
 import os
 
 # 実際にはraspberryPiのフォルダを指定する
-DEF_DBNAME = 'db/TEST.db'
+DEF_DBNAME = '/var/lib/sqlite3/log.db'
 
 class SQLController(object):
 	def __init__(self):

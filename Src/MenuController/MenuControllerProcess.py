@@ -3,7 +3,7 @@
 import LogPrint as LOG
 from Switch.api import SwitchAPI
 from Display.api import DisplayAPI
-import socket
+import ipget
 
 class MenuControllerProcess(object):
 	__mIPAdder = ""
@@ -28,8 +28,8 @@ class MenuControllerProcess(object):
 
 	def __getIPAddress(self):
 		try:
-			host = socket.gethostname()
-			ip = socket.gethostbyname(host)
+			instance = ipget.ipget()
+			ip = instance.ipaddr("eth0")
 		except:
 			# 切替り中のタイミングによってはエラーとなる
 			ip = self.__mIPAdder
