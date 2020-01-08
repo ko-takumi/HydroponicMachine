@@ -8,6 +8,7 @@ import LogPrint as LOG
 class SwitchMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
+	__mRegPushSwCb = []
 
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -16,6 +17,10 @@ class SwitchMain(threading.Thread):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
 		while True:
+			# お試し
+			for cbFunc in self.__mRegPushSwCb:
+				cbFunc()
+				
 			self.__executeCommand()
 			time.sleep(1)
 
@@ -32,6 +37,9 @@ class SwitchMain(threading.Thread):
 		if cmd == Cmd.SWITCH_CMD_QUIT:
 			print("--> SwitchMain QUIT.[", param, "]")
 			quit()
+
+		elif cmd == Cmd.SWITCH_CMD_REG_PUSHSW:
+			self.__mRegPushSwCb.append(param[0])
 
 		else:
 			print("Cmd Error.")

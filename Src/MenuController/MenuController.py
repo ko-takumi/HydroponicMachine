@@ -3,6 +3,7 @@
 import time
 import threading
 import Builder
+from Switch.api import SwitchAPI
 from . import MenuControllerCb
 from . import MenuControllerCmd as Cmd
 from . import MenuControllerProcess
@@ -25,6 +26,10 @@ class MenuController(threading.Thread):
 		builder = Builder.Builder()
 		dataApi = builder.getDataCollecterAPI()
 		dataApi.registerChangeTemprature(cb.getTemperatureCb)
+
+		# スイッチ押下通知を登録
+		self.__mApiSwitch	= SwitchAPI.SwitchAPI()
+		self.__mApiSwitch.registerPushSw(cb.notifyPushSWCb)
 
 		while True:
 			# コマンド実行
@@ -51,6 +56,9 @@ class MenuController(threading.Thread):
 
 		elif cmd == Cmd.MENU_CMD_GET_TEMP:
 			self.__mProcess.updataTemperature(param[0])
+
+		elif cmd == Cmd.MENU_CMD_PUSH_SW:
+			self.__mProcess.notifyPushSW()
 
 		else:
 			LOG.ERROR(__name__, "{} {}".format(cmd, param))

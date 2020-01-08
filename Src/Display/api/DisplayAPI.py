@@ -17,5 +17,8 @@ class DisplayAPI(object):
 	def notifyIPAddress(self, ip):
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_IPADDRESS, ip)
 
+	def notifyChangeMode(self):
+		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_CHANGEMODE, None)
+
 	def threadEnd(self):
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_QUIT, None)

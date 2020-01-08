@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import LogPrint as LOG
-from Switch.api import SwitchAPI
 from Display.api import DisplayAPI
 import ipget
 
 class MenuControllerProcess(object):
 	__mIPAdder = ""
 	def __init__(self):
-		self.__mApiSwitch	= SwitchAPI.SwitchAPI()
-		self.__mApiDisplay	= DisplayAPI.DisplayAPI()
+		self.__mApiDisplay	= DisplayAPI.DisplayAPI()	# TODO: Mainに移管したい
 
 		# ipアドレス取得
 		self.__mIPAdder = self.__getIPAddress()
@@ -25,6 +23,10 @@ class MenuControllerProcess(object):
 	def updataTemperature(self, value):
 		LOG.INFO(__name__, "UPDATA-TEMP[{}].".format(value))
 		self.__mApiDisplay.notifyTemperature([value])
+
+	def notifyPushSW(self):
+		LOG.INFO(__name__, "PUSH SW.")
+		self.__mApiDisplay.notifyChangeMode()
 
 	def __getIPAddress(self):
 		try:

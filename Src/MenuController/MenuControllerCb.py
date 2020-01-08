@@ -9,3 +9,6 @@ class MenuControllerCb(object):
 
 	def getTemperatureCb(self, value):
 		self.__mMain.notifyCommand(Cmd.MENU_CMD_GET_TEMP, [value])
+
+	def notifyPushSWCb(self):
+		self.__mMain.notifyCommand(Cmd.MENU_CMD_PUSH_SW, [None])

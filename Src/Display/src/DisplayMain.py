@@ -50,6 +50,10 @@ class DisplayMain(threading.Thread):
 			LOG.INFO(__name__, "{}: {}".format(cmd, param))
 			self.__mProcess.notifyIPAddress(param[0])
 
+		elif cmd == Cmd.DISPLAY_CMD_NOTIFY_CHANGEMODE:
+			LOG.INFO(__name__, "{}: {}".format(cmd, param))
+			self.__mProcess.notifyChangeMode()
+
 		else:
 			LOG.ERROR(__name__, "{} {}".format(cmd, param))
 			
