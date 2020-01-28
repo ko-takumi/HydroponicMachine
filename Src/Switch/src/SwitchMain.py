@@ -18,8 +18,10 @@ class SwitchMain(threading.Thread):
 
 		while True:
 			# お試し
+			'''
 			for cbFunc in self.__mRegPushSwCb:
 				cbFunc()
+			'''
 				
 			self.__executeCommand()
 			time.sleep(1)

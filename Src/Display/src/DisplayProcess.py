@@ -4,7 +4,7 @@ import LogPrint as LOG
 from . import DisplayIO
 
 BUS_NUMBER = 1
-ADDR = 0x50
+ADDR = 0x27
 REGISTER_SETTING = 0x00
 REGISTER_DISPLAY = 0x80
 

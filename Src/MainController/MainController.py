@@ -20,8 +20,9 @@ class MainController(threading.Thread):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
 		while True:
-			time.sleep(1)
-			# self.__takePhoto()
+			self.__takePhoto()
+			time.sleep(60*60)	# 暫定(1h)
+			
 
 	def __takePhoto(self):
 		self.__mApiLamp.on()
