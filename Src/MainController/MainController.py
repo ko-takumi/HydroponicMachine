@@ -19,9 +19,11 @@ class MainController(threading.Thread):
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
+		# 暫定
 		while True:
+			self.__mApiPump.execute(3)
 			self.__takePhoto()
-			time.sleep(60*60)	# 暫定(1h)
+			time.sleep(10)	# 暫定(1h)
 			
 
 	def __takePhoto(self):

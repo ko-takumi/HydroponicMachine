@@ -7,8 +7,9 @@ import RPi.GPIO as GPIO
 DEF_PIN = 15
 
 class LampIO(object):
-	__mPin = DEF_PIN
-	def __init__(self):
+	__mPin = 0
+	def __init__(self, pin):
+		self.__mPin = DEF_PIN
 		GPIO.setup(self.__mPin, GPIO.OUT)
 
 		# wakeup

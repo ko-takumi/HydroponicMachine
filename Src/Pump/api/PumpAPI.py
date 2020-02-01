@@ -11,6 +11,9 @@ class PumpAPI(object):
 	def __del__(self):
 		pass
 
+	def execute(self, waitTime):
+		self.__mMain.notifyCommand(Cmd.PUMP_CMD_EXECUTE, [waitTime])
+
 	def threadEnd(self):
 		print("--> PumpAPI Stop.")
 		self.__mMain.notifyCommand(Cmd.PUMP_CMD_QUIT, None)

@@ -2,4 +2,5 @@
 # -*- coding: utf-8 -*-
 
 PUMP_CMD_NONE = ""
+PUMP_CMD_EXECUTE = "PUMP_CMD_EXECUTE"
 PUMP_CMD_QUIT = "PUMP_CMD_QUIT"

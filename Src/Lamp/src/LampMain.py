@@ -6,6 +6,8 @@ from . import LampIO
 from . import LampCmd as Cmd
 import LogPrint as LOG
 
+DEF_PIN = 15
+
 class LampMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
@@ -13,7 +15,7 @@ class LampMain(threading.Thread):
 
 	def __init__(self):
 		threading.Thread.__init__(self)
-		self.__mIo = LampIO.LampIO()
+		self.__mIo = LampIO.LampIO(DEF_PIN)
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
