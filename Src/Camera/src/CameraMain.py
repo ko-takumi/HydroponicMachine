@@ -37,8 +37,10 @@ class CameraMain(threading.Thread):
 			quit()
 
 		elif cmd == Cmd.CAMERA_CMD_EXECUTE:
-			self.__mIo.execute()
-
+			result, fileName = self.__mIo.execute()
+			if result == True:
+				param[0](fileName)
+				
 		else:
 			print("Cmd Error.")
 			

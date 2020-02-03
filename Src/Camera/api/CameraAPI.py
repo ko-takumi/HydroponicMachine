@@ -11,8 +11,8 @@ class CameraAPI(object):
 	def __del__(self):
 		pass
 
-	def execute(self):
-		self.__mMain.notifyCommand(Cmd.CAMERA_CMD_EXECUTE, None)
+	def execute(self, cb):
+		self.__mMain.notifyCommand(Cmd.CAMERA_CMD_EXECUTE, [cb])
 
 	def threadEnd(self):
 		print("--> CameraAPI Stop.")

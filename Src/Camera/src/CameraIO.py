@@ -4,6 +4,8 @@ import LogPrint as LOG
 import subprocess
 import datetime
 
+DEF_IMAGE_PATH = "../../images/"	# 暫定
+
 class CameraIO(object):
 	def __init__(self):
 		pass
@@ -14,6 +16,8 @@ class CameraIO(object):
 	def execute(self):
 		LOG.INFO(__name__, "Take Photo.")
 		now = datetime.datetime.now()
-		cmd = "/usr/bin/fswebcam -r 1920x1080 ../{0:%Y%m%d%H%S%f}.jpg".format(now)
+		fileName = "{0}{1:%Y%m%d%H%S%f}.jpg".format(DEF_IMAGE_PATH, now)
+		cmd = "/usr/bin/fswebcam -r 1920x1080 " + fileName
+		print(cmd)
 		subprocess.call(cmd.split())
-		return
+		return True, fileName
