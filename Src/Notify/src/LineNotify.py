@@ -33,7 +33,7 @@ class LineNotify(object):
 	def sendImage(self, img):
 		LOG.INFO(__name__, "send[{}]".format(img))
 		
-		message = "image."
+		message = "image[{}]".format(img)
 		payload = {'message': message}
 
 		f = open(img, "rb")

@@ -10,8 +10,30 @@ import LogPrint as LOG
 from Notify.src import LineNotify
 
 DEF_LAMP_OFF_TIME = 3.0
+DEF_WARTERING_TIME = 1.0
 
 class MainController(threading.Thread, LineNotify.LineNotify):
+	__mSubThreadFlag = True
+
+	# 時間設定
+	# TODO: 外部から設定できるようにしたい
+	__mPhotoTime = 60 * 60			# 1h
+	__mPlantManagemntTime = 30 * 60 # 0.5h
+	__mNotifyTime = (3 * 60) * 60	# 3.0h
+
+	# スレッド
+	__mPhotoThread = None
+	__mPompThread = None
+	__mNotifyThread = None
+
+	# 実施有無
+	__mIsPhotoStart = False
+	__mIsPlantManagemnt = False
+
+	# 通知内容
+	__mTempValue = 0.0
+	__mImageFile = ""
+
 	def __init__(self):
 		threading.Thread.__init__(self)
 		LineNotify.LineNotify.__init__(self)
@@ -23,21 +45,57 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 		self.__mData = builder.getDataCollecterAPI()
 
 		self.__mData.getTemperature(self.getTemperatureCB)
-		self.sentMessage("START", "起動した")
+		self.sentMessage("INFO", "起動した")
+
+		# photoスレッド生成
+		self.__mPhotoThread = threading.Thread(target=self.__executePhotoThread)
+		self.__mPhotoThread.start()
+
+		# pompスレッド生成
+		self.__mPompThread = threading.Thread(target=self.__executePlantManagerThread)
+		self.__mPompThread.start()
+
+		# 通知スレッド生成
+		self.__mNotifyThread = threading.Thread(target=self.__executeNotifyThread)
+		self.__mNotifyThread.start()
+
+	def __executePhotoThread(self):
+		while self.__mSubThreadFlag:
+			self.__mIsPhotoStart = True
+			time.sleep(self.__mPhotoTime)
+
+	def __executePlantManagerThread(self):
+		while self.__mSubThreadFlag:
+			self.__mIsPlantManagemnt = True
+			time.sleep(self.__mPlantManagemntTime)
+
+	def __executeNotifyThread(self):
+		while self.__mSubThreadFlag:
+			self.__mIsNotify = True
+			time.sleep(self.__mNotifyTime)
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
 
-		# 暫定
 		while True:
-
-			self.__mApiPump.execute(1)
-			self.__takePhoto()
-
-			self.__mData.getTemperature(self.getTemperatureCB)
-
-			time.sleep(30*60)	# 暫定(0.5h)
+			# 写真撮影実施
+			if self.__mIsPhotoStart == True:
+				self.__mIsPhotoStart = False
+				self.__takePhoto()
 			
+			# 水やり実施
+			if self.__mIsPlantManagemnt == True:
+				self.__mIsPlantManagemnt = False
+				self.__mApiPump.execute(DEF_WARTERING_TIME)
+				self.__mData.getTemperature(self.getTemperatureCB)
+
+			# Line通知実施
+			if self.__mIsNotify == True:
+				self.__mIsNotify = False
+				self.__NotifyInfo()
+
+			time.sleep(1)
+		return
 
 	def __takePhoto(self):
 		self.__mApiLamp.on()
@@ -45,8 +103,13 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 		self.__mApiCamera.execute(self.getImageCB)
 		self.__mApiLamp.off(DEF_LAMP_OFF_TIME)
 
+	def __NotifyInfo(self):
+		self.sentMessage("現在温度", str(self.__mTempValue))
+		if self.__mImageFile != "":
+			self.sendImage(self.__mImageFile)
+
 	def getTemperatureCB(self, value):
-		self.sentMessage("温度", str(value))
+		self.__mTempValue = value
 
 	def getImageCB(self, fileName):
-		self.sendImage(fileName)
+		self.__mImageFile = fileName

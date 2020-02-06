@@ -33,7 +33,7 @@ class DataCollecterProcess(object):
 		sql = "SELECT * FROM temperatureLogs WHERE id = {}".format(self.__mWateringIdMax)
 		data = ()
 		result, item = self.__mSqlCtr.execute(sql, data)
-		if result == False:
+		if (result == False) or (item == None):
 			LOG.ERROR(__name__, "__mSqlCtr.execute() error.")
 			return 0.0
 			
