@@ -19,8 +19,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 	# TODO: 外部から設定できるようにしたい
 	__mPhotoTime = 60 * 60			# 1h
 	__mPlantManagemntTime = 30 * 60 # 0.5h
-	# __mNotifyTime = (3 * 60) * 60	# 3.0h
-	__mNotifyTime = 5
+	__mNotifyTime = (3 * 60) * 60	# 3.0h
 
 	# スレッド
 	__mPhotoThread = None
