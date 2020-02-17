@@ -14,6 +14,9 @@ class DisplayAPI(object):
 	def notifyTemperature(self, value):
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_TEMP, value)
 
+	def notifyHumidity(self, value):
+		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_HUMID, value)
+
 	def notifyIPAddress(self, ip):
 		self.__mMain.notifyCommand(Cmd.DISPLAY_CMD_NOTIFY_IPADDRESS, ip)
 

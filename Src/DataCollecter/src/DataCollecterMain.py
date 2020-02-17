@@ -10,6 +10,7 @@ class DataCollecterMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
 	__mRegGetTempCb = []
+	__mRegGetHumidityCb = []
 
 	def __init__(self):
 		threading.Thread.__init__(self)
@@ -45,8 +46,20 @@ class DataCollecterMain(threading.Thread):
 			value = self.__mProc.getTemperature()
 			param[0](value)
 
+		elif cmd == Cmd.DATA_CMD_SET_HUMID:	# 湿度格納
+			self.__mProc.setHumidity(param[0])
+			for cbFunc in self.__mRegGetHumidityCb:
+				cbFunc(param[0])
+
+		elif cmd == Cmd.DATA_CMD_GET_HUMID:	# 湿度取得
+			value = self.__mProc.getHumidity()
+			param[0](value)
+
 		elif cmd == Cmd.DATA_CMD_REG_CHANGETEMP:
 			self.__mRegGetTempCb.append(param[0])
+
+		elif cmd == Cmd.DATA_CMD_REG_CHANGEHUMID:
+			self.__mRegGetHumidityCb.append(param[0])
 
 		else:
 			LOG.ERROR(__name__, "{} {}".format(cmd, param))

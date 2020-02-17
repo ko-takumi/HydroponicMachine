@@ -18,6 +18,7 @@ class SQLController(object):
 			conect = self.mDb.cursor()
 			conect.execute('''CREATE TABLE wateringLogs(id INTEGER, history TEXT)''')
 			conect.execute('''CREATE TABLE temperatureLogs(id INTEGER, history TEXT, temperature REAL)''')
+			conect.execute('''CREATE TABLE humidityLogs(id INTEGER, history TEXT, humidity REAL)''')
 			self.mDb.commit()
 			conect.close()
 

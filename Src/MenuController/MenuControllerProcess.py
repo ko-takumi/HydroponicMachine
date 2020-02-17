@@ -24,6 +24,10 @@ class MenuControllerProcess(object):
 		LOG.INFO(__name__, "UPDATA-TEMP[{}].".format(value))
 		self.__mApiDisplay.notifyTemperature([value])
 
+	def updataHumidity(self, value):
+		LOG.INFO(__name__, "UPDATA-HUMID[{}].".format(value))
+		self.__mApiDisplay.notifyHumidity([value])
+
 	def notifyPushSW(self):
 		LOG.INFO(__name__, "PUSH SW.")
 		self.__mApiDisplay.notifyChangeMode()

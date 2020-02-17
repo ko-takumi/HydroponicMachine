@@ -26,6 +26,7 @@ class MenuController(threading.Thread):
 		builder = Builder.Builder()
 		dataApi = builder.getDataCollecterAPI()
 		dataApi.registerChangeTemprature(cb.getTemperatureCb)
+		dataApi.registerChangeHumidity(cb.getHumidityCb)
 
 		# スイッチ押下通知を登録
 		self.__mApiSwitch	= SwitchAPI.SwitchAPI()
@@ -56,6 +57,9 @@ class MenuController(threading.Thread):
 
 		elif cmd == Cmd.MENU_CMD_GET_TEMP:
 			self.__mProcess.updataTemperature(param[0])
+
+		elif cmd == Cmd.MENU_CMD_GET_HUMID:
+			self.__mProcess.updataHumidity(param[0])
 
 		elif cmd == Cmd.MENU_CMD_PUSH_SW:
 			self.__mProcess.notifyPushSW()

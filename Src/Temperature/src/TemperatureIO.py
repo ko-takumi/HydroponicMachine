@@ -16,9 +16,11 @@ class TemperatureIO(object):
 		
 	def get(self):
 		result = self.__mTempSensor.read()
-		if result.is_valid():
-			value = result.temperature
-			return True, value
+		success = result.is_valid()
+		if success == True:
+			temperature = result.temperature
+			humidity = result.humidity
+			return True, temperature, humidity
 
 		LOG.ERROR(__name__, "self.__mTempSensor.read() is Error.")
-		return False, 0.0
+		return False, 0.0, 0.0

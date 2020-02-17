@@ -46,6 +46,10 @@ class DisplayMain(threading.Thread):
 			LOG.INFO(__name__, "{}: {}".format(cmd, param))
 			self.__mProcess.notifyTemperature(param[0])
 
+		elif cmd == Cmd.DISPLAY_CMD_NOTIFY_HUMID:
+			LOG.INFO(__name__, "{}: {}".format(cmd, param))
+			self.__mProcess.notifyHumidity(param[0])
+
 		elif cmd == Cmd.DISPLAY_CMD_NOTIFY_IPADDRESS:
 			LOG.INFO(__name__, "{}: {}".format(cmd, param))
 			self.__mProcess.notifyIPAddress(param[0])

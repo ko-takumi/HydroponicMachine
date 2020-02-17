@@ -14,6 +14,7 @@ MODEID_MAX = 1
 class DisplayProcess(object):
 	__mModeID = MODEID_TEMP_IP	# TODO: 現在固定
 	__mTemp = 0.0
+	__mHumid = 0.0
 	__mIPAddr = "0.0.0.0"
 	__mIsDisp = False
 
@@ -28,7 +29,8 @@ class DisplayProcess(object):
 
 		# modeによって出力を変化させる
 		if self.__mModeID == MODEID_TEMP_IP:
-			self.__mDisplay.writeStr1st(self.__mTemp)
+			str1st = "{}'C({}%)".format(self.__mTemp, self.__mHumid)
+			self.__mDisplay.writeStr1st(str1st)
 			self.__mDisplay.writeStr2nd(self.__mIPAddr)
 
 		self.__mIsDisp = False
@@ -37,6 +39,11 @@ class DisplayProcess(object):
 		LOG.INFO(__name__, "TEMP[{}]".format(value))
 		self.__mIsDisp = True
 		self.__mTemp = value
+
+	def notifyHumidity(self, value):
+		LOG.INFO(__name__, "HUMID[{}]".format(value))
+		self.__mIsDisp = True
+		self.__mHumid = value
 
 	def notifyIPAddress(self, ip):
 		LOG.INFO(__name__, "IP-ADDRESS[{}]".format(ip))

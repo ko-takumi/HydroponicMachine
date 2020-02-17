@@ -23,9 +23,10 @@ class TemperatureMain(threading.Thread):
 			self.__executeCommand()
 
 			# 温度取得/格納
-			result, value = self.__mSensor.get()
+			result, temperature, humidity = self.__mSensor.get()
 			if result == True:
-				self.__mDataApi.setTemperature(value)
+				self.__mDataApi.setTemperature(temperature)
+				self.__mDataApi.setHumidity(humidity)
 			else:
 				LOG.ERROR(__name__, "self.__mSensor.get() is Error.")
 

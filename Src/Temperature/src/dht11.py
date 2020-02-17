@@ -18,6 +18,11 @@ class DHT11Result:
         self.temperature = temperature
         self.humidity = humidity
 
+    def set(self, error_code, temperature, humidity):
+        self.error_code = error_code
+        self.temperature = temperature
+        self.humidity = humidity
+
     def is_valid(self):
         return self.error_code == DHT11Result.ERR_NO_ERROR
 
@@ -26,9 +31,11 @@ class DHT11:
     'DHT11 sensor reader class for Raspberry'
 
     __pin = 0
+    __mResultObj = None
 
     def __init__(self, pin):
         self.__pin = pin
+        self.__mResultObj = DHT11Result(DHT11Result.ERR_NO_ERROR, 0, 0)
 
     def read(self):
         RPi.GPIO.setup(self.__pin, RPi.GPIO.OUT)
@@ -50,7 +57,8 @@ class DHT11:
 
         # if bit count mismatch, return error (4 byte data + 1 byte checksum)
         if len(pull_up_lengths) != 40:
-            return DHT11Result(DHT11Result.ERR_MISSING_DATA, 0, 0)
+            self.__mResultObj.set(DHT11Result.ERR_MISSING_DATA, 0, 0)
+            return self.__mResultObj
 
         # calculate bits from lengths of the pull up periods
         bits = self.__calculate_bits(pull_up_lengths)
@@ -61,7 +69,8 @@ class DHT11:
         # calculate checksum and check
         checksum = self.__calculate_checksum(the_bytes)
         if the_bytes[4] != checksum:
-            return DHT11Result(DHT11Result.ERR_CRC, 0, 0)
+            self.__mResultObj.set(DHT11Result.ERR_CRC, 0, 0)
+            return self.__mResultObj
 
         # ok, we have valid data
 
@@ -73,8 +82,8 @@ class DHT11:
 
         temperature = the_bytes[2] + float(the_bytes[3]) / 10
         humidity = the_bytes[0] + float(the_bytes[1]) / 10
-
-        return DHT11Result(DHT11Result.ERR_NO_ERROR, temperature, humidity)
+        self.__mResultObj.set(DHT11Result.ERR_NO_ERROR, temperature, humidity)
+        return self.__mResultObj
 
     def __send_and_sleep(self, output, sleep):
         RPi.GPIO.output(self.__pin, output)

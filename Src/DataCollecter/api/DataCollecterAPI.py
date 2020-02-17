@@ -20,9 +20,21 @@ class DataCollecterAPI(object):
 		LOG.INFO(__name__, "DATA_CMD_GET_TEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_TEMP, [cb])
 
+	def setHumidity(self, value):
+		LOG.INFO(__name__, "DATA_CMD_SET_HUMID.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_HUMID, [value])
+
+	def getHumidity(self, cb):
+		LOG.INFO(__name__, "DATA_CMD_GET_HUMID.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_HUMID, [cb])
+
 	def registerChangeTemprature(self, cb):
 		LOG.INFO(__name__, "DATA_CMD_REG_CHANGETEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_REG_CHANGETEMP, [cb])
+
+	def registerChangeHumidity(self, cb):
+		LOG.INFO(__name__, "DATA_CMD_REG_CHANGEHUMID.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_REG_CHANGEHUMID, [cb])
 
 	def threadEnd(self):
 		LOG.INFO(__name__, "DISPLAY_CMD_QUIT.")

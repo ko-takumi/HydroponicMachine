@@ -19,7 +19,8 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 	# TODO: 外部から設定できるようにしたい
 	__mPhotoTime = 60 * 60			# 1h
 	__mPlantManagemntTime = 30 * 60 # 0.5h
-	__mNotifyTime = (3 * 60) * 60	# 3.0h
+	# __mNotifyTime = (3 * 60) * 60	# 3.0h
+	__mNotifyTime = 5
 
 	# スレッド
 	__mPhotoThread = None
@@ -32,6 +33,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 
 	# 通知内容
 	__mTempValue = 0.0
+	__mHumidValue = 0.0
 	__mImageFile = ""
 
 	def __init__(self):
@@ -45,6 +47,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 		self.__mData = builder.getDataCollecterAPI()
 
 		self.__mData.getTemperature(self.getTemperatureCB)
+		self.__mData.getHumidity(self.getHumidityCB)
 		self.sentMessage("INFO", "起動した")
 
 		# photoスレッド生成
@@ -88,6 +91,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 				self.__mIsPlantManagemnt = False
 				self.__mApiPump.execute(DEF_WARTERING_TIME)
 				self.__mData.getTemperature(self.getTemperatureCB)
+				self.__mData.getHumidity(self.getHumidityCB)
 
 			# Line通知実施
 			if self.__mIsNotify == True:
@@ -104,12 +108,17 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 		self.__mApiLamp.off(DEF_LAMP_OFF_TIME)
 
 	def __NotifyInfo(self):
-		self.sentMessage("現在温度", str(self.__mTempValue))
+		msg = "{}度 {}%".format(self.__mTempValue, self.__mHumidValue)
+		print(msg)
+		self.sentMessage("温度/湿度", msg)
 		if self.__mImageFile != "":
 			self.sendImage(self.__mImageFile)
 
 	def getTemperatureCB(self, value):
 		self.__mTempValue = value
+
+	def getHumidityCB(self, value):
+		self.__mHumidValue = value
 
 	def getImageCB(self, fileName):
 		self.__mImageFile = fileName

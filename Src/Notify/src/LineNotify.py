@@ -3,7 +3,7 @@
 import requests
 import LogPrint as LOG
 SUCCESS_NUM = "<Response [200]>"
-DEF_TOKEN = 'xxxxxxxxxx'
+DEF_TOKEN = 'xxxx'
 DEF_API = 'https://notify-api.line.me/api/notify'
 
 class LineNotify(object):
