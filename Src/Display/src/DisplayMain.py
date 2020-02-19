@@ -5,16 +5,21 @@ import threading
 from . import DisplayCmd as Cmd
 from . import DisplayProcess
 import LogPrint as LOG
+import Semaphore
+
+DEF_MYNAME = "Display"
 
 class DisplayMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
 	__mProcess	= None
+	__mSem	= None
 
 	def __init__(self, dataObj):
 		threading.Thread.__init__(self)
 		self.__mDataApi = dataObj
 		self.__mProcess = DisplayProcess.DisplayProcess(self.__mDataApi)
+		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
@@ -29,15 +34,20 @@ class DisplayMain(threading.Thread):
 			time.sleep(0.5)
 
 	def notifyCommand(self, cmd, param):
+		self.__mSem.lock()
 		self.__mCommand.append(cmd)
 		self.__mParam.append(param)
+		self.__mSem.unlock()
 
 	def __executeCommand(self):
 		if len(self.__mCommand) == 0:
 			return
 
+		self.__mSem.lock()
 		cmd = self.__mCommand.pop(0)
 		param = self.__mParam.pop(0)
+		self.__mSem.unlock()
+
 		if cmd == Cmd.DISPLAY_CMD_QUIT:
 			LOG.INFO(__name__, "Thread QUIT. [{}]".format(hex(id(self))))
 			quit()
