@@ -108,7 +108,6 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 
 	def __NotifyInfo(self):
 		msg = "{}度 {}%".format(self.__mTempValue, self.__mHumidValue)
-		print(msg)
 		self.sentMessage("温度/湿度", msg)
 		if self.__mImageFile != "":
 			self.sendImage(self.__mImageFile)

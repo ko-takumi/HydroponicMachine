@@ -48,7 +48,10 @@ class DataCollecterMain(threading.Thread):
 			quit()
 
 		elif cmd == Cmd.DATA_CMD_SET_TEMP:	# 温度格納
-			self.__mProc.setTemperature(param[0])
+			isSave = param[1]
+			if isSave == True:
+				self.__mProc.setTemperature(param[0])
+
 			for cbFunc in self.__mRegGetTempCb:
 				cbFunc(param[0])
 
@@ -57,7 +60,10 @@ class DataCollecterMain(threading.Thread):
 			param[0](value)
 
 		elif cmd == Cmd.DATA_CMD_SET_HUMID:	# 湿度格納
-			self.__mProc.setHumidity(param[0])
+			isSave = param[1]
+			if isSave == True:
+				self.__mProc.setHumidity(param[0])
+				
 			for cbFunc in self.__mRegGetHumidityCb:
 				cbFunc(param[0])
 

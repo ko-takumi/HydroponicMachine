@@ -13,12 +13,28 @@ class TemperatureMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
 	__mDataCtr	= None
+	__mSubThreadFlag = True
+	__mIsSave = False
+	__mJudgeSaveThread = None
+
+	# 時間設定
+	# TODO: 外部から設定できるようにしたい
+	__mSaveTime = 30 * 60	# 0.5h
 
 	def __init__(self, dataObj):
 		threading.Thread.__init__(self)
 		self.__mDataApi = dataObj
 		self.__mSensor = TemperatureIO.TemperatureIO()
 		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
+
+		# save判定スレッド生成
+		self.__mJudgeSaveThread = threading.Thread(target=self.__executeJudgeSave)
+		self.__mJudgeSaveThread.start()
+
+	def __executeJudgeSave(self):
+		while self.__mSubThreadFlag:
+			self.__mIsSave = True
+			time.sleep(self.__mSaveTime)
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
@@ -29,8 +45,13 @@ class TemperatureMain(threading.Thread):
 			# 温度取得/格納
 			result, temperature, humidity = self.__mSensor.get()
 			if result == True:
-				self.__mDataApi.setTemperature(temperature)
-				self.__mDataApi.setHumidity(humidity)
+				if self.__mIsSave == True:
+					self.__mDataApi.setTemperature(temperature, True)
+					self.__mDataApi.setHumidity(humidity, True)
+					self.__mIsSave = False
+				else:
+					self.__mDataApi.setTemperature(temperature, False)
+					self.__mDataApi.setHumidity(humidity, False)
 			else:
 				LOG.ERROR(__name__, "self.__mSensor.get() is Error.")
 

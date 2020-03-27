@@ -12,17 +12,17 @@ class DataCollecterAPI(object):
 	def __del__(self):
 		pass
 
-	def setTemperature(self, value):
+	def setTemperature(self, value, isSave):
 		LOG.INFO(__name__, "DATA_CMD_SET_TEMP.")
-		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_TEMP, [value])
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_TEMP, [value, isSave])
 
 	def getTemperature(self, cb):
 		LOG.INFO(__name__, "DATA_CMD_GET_TEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_TEMP, [cb])
 
-	def setHumidity(self, value):
+	def setHumidity(self, value, isSave):
 		LOG.INFO(__name__, "DATA_CMD_SET_HUMID.")
-		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_HUMID, [value])
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_HUMID, [value, isSave])
 
 	def getHumidity(self, cb):
 		LOG.INFO(__name__, "DATA_CMD_GET_HUMID.")
