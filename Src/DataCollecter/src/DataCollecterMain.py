@@ -71,6 +71,10 @@ class DataCollecterMain(threading.Thread):
 			value = self.__mProc.getHumidity()
 			param[0](value)
 
+		elif cmd == Cmd.DATA_CMD_SET_PICTURE: # 画像格納
+			fileName = param[0]
+			self.__mProc.setPicture(fileName)
+
 		elif cmd == Cmd.DATA_CMD_REG_CHANGETEMP:
 			self.__mRegGetTempCb.append(param[0])
 

@@ -28,6 +28,10 @@ class DataCollecterAPI(object):
 		LOG.INFO(__name__, "DATA_CMD_GET_HUMID.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_GET_HUMID, [cb])
 
+	def setPicture(self, fileName):
+		LOG.INFO(__name__, "DATA_CMD_SET_PICTURE.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_PICTURE, [fileName])
+
 	def registerChangeTemprature(self, cb):
 		LOG.INFO(__name__, "DATA_CMD_REG_CHANGETEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_REG_CHANGETEMP, [cb])

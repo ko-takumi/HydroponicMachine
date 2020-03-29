@@ -27,7 +27,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 	__mNotifyThread = None
 
 	# 実施有無
-	__mIsPhotoStart = False
+	__mIsPhotoStart = True
 	__mIsPlantManagemnt = False
 
 	# 通知内容

@@ -37,7 +37,7 @@ class Builder(object):
 		self.__mSwitchThread		= SwitchMain.SwitchMain()
 		self.__mDisplayThread		= DisplayMain.DisplayMain(self.__mDataCollecterAPI)
 		self.__mPumpThread			= PumpMain.PumpMain()
-		self.__mCameraThread		= CameraMain.CameraMain()
+		self.__mCameraThread		= CameraMain.CameraMain(self.__mDataCollecterAPI)
 		self.__mLampThread			= LampMain.LampMain()
 
 		# CBクラス作成

@@ -12,11 +12,13 @@ DEF_MYNAME = "Camera"
 class CameraMain(threading.Thread):
 	__mCommand	= []
 	__mParam	= []
+	__mDataCtr	= None
 	__mIo		= None
 	__mSem	= None
 
-	def __init__(self):
+	def __init__(self, dataObj):
 		threading.Thread.__init__(self)
+		self.__mDataApi = dataObj
 		self.__mIo = CameraIO.CameraIO()
 		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
 
@@ -50,6 +52,7 @@ class CameraMain(threading.Thread):
 			result, fileName = self.__mIo.execute()
 			if result == True:
 				param[0](fileName)
+				self.__mDataApi.setPicture(fileName)
 				
 		else:
 			print("Cmd Error.")
