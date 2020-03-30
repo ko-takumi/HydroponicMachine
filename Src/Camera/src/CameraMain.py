@@ -52,7 +52,8 @@ class CameraMain(threading.Thread):
 			result, fileName = self.__mIo.execute()
 			if result == True:
 				param[0](fileName)
-				self.__mDataApi.setPicture(fileName)
+				print("-----> ", fileName[fileName.rfind('/') + 1:])
+				self.__mDataApi.setPicture(fileName[fileName.rfind('/') + 1:])
 				
 		else:
 			print("Cmd Error.")

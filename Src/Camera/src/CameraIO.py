@@ -4,7 +4,7 @@ import LogPrint as LOG
 import subprocess
 import datetime
 
-DEF_IMAGE_PATH = "../../images/"	# 暫定
+DEF_IMAGE_PATH = "/home/pi/django_app/Hydroponic/static/Hydroponic/images/"	# 暫定
 
 class CameraIO(object):
 	def __init__(self):
