@@ -139,7 +139,7 @@ class DataCollecterProcess(object):
 			LOG.ERROR(__name__, "__mSqlCtr.execute() error.")
 			return False
 
-		self.__mPictureIdMax += 1
+		self.__mColorIdMax += 1
 		return True
 	
 	def updateGrowth(self, r, g, b):
