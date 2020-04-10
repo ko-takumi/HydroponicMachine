@@ -10,16 +10,17 @@ import LogPrint as LOG
 from Notify.src import LineNotify
 
 DEF_LAMP_OFF_TIME = 3.0
-DEF_WARTERING_TIME = 1.0
 
 class MainController(threading.Thread, LineNotify.LineNotify):
 	__mSubThreadFlag = True
 
 	# 時間設定
-	# TODO: 外部から設定できるようにしたい
-	__mPhotoTime = 60 * 60			# 1h
-	__mPlantManagemntTime = 30 * 60 # 0.5h
-	__mNotifyTime = (3 * 60) * 60	# 3.0h
+	__mPhotoTime = 0
+	__mPlantManagemntTime = 0
+	__mNotifyTime = 0
+
+	# 水量設定
+	__mWatteringTime = 0.0
 
 	# スレッド
 	__mPhotoThread = None
@@ -27,20 +28,30 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 	__mNotifyThread = None
 
 	# 実施有無
-	__mIsPhotoStart = True
+	__mIsPhotoStart		= True
 	__mIsPlantManagemnt = False
+	__mIsNotify			= False
 
 	# 通知内容
 	__mTempValue = 0.0
 	__mHumidValue = 0.0
 	__mImageFile = ""
 
-	def __init__(self):
+	def __init__(self, photoTime, plantManagemntTime, notifyTime, watteringTime, lineToken):
 		threading.Thread.__init__(self)
-		LineNotify.LineNotify.__init__(self)
+		LineNotify.LineNotify.__init__(self, lineToken)
 		self.__mApiPump		= PumpAPI.PumpAPI()
 		self.__mApiCamera	= CameraAPI.CameraAPI()
 		self.__mApiLamp		= LampAPI.LampAPI()
+
+		self.__mPhotoTime			= photoTime
+		self.__mPlantManagemntTime	= plantManagemntTime
+		self.__mNotifyTime			= notifyTime
+		self.__mWatteringTime		= watteringTime
+		LOG.INFO(__name__, "photo time[{}]".format(self.__mPhotoTime))
+		LOG.INFO(__name__, "plantManagemnt time[{}]".format(self.__mPlantManagemntTime))
+		LOG.INFO(__name__, "notify time[{}]".format(self.__mNotifyTime))
+		LOG.INFO(__name__, "wattering time[{}]".format(self.__mWatteringTime))
 
 		builder = Builder.Builder()
 		self.__mData = builder.getDataCollecterAPI()
@@ -58,8 +69,10 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 		self.__mPompThread.start()
 
 		# 通知スレッド生成
-		self.__mNotifyThread = threading.Thread(target=self.__executeNotifyThread)
-		self.__mNotifyThread.start()
+		# 通知間隔が0以下の場合は、通知を行わない
+		if self.__mNotifyTime > 0:
+			self.__mNotifyThread = threading.Thread(target=self.__executeNotifyThread)
+			self.__mNotifyThread.start()
 
 	def __executePhotoThread(self):
 		while self.__mSubThreadFlag:
@@ -88,7 +101,7 @@ class MainController(threading.Thread, LineNotify.LineNotify):
 			# 水やり実施
 			if self.__mIsPlantManagemnt == True:
 				self.__mIsPlantManagemnt = False
-				self.__mApiPump.execute(DEF_WARTERING_TIME)
+				self.__mApiPump.execute(self.__mWatteringTime)
 				self.__mData.getTemperature(self.getTemperatureCB)
 				self.__mData.getHumidity(self.getHumidityCB)
 

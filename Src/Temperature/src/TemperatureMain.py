@@ -16,16 +16,15 @@ class TemperatureMain(threading.Thread):
 	__mSubThreadFlag = True
 	__mIsSave = False
 	__mJudgeSaveThread = None
+	__mSaveTime = 0
 
-	# 時間設定
-	# TODO: 外部から設定できるようにしたい
-	__mSaveTime = 30 * 60	# 0.5h
-
-	def __init__(self, dataObj):
+	def __init__(self, dataObj, saveTime):
 		threading.Thread.__init__(self)
 		self.__mDataApi = dataObj
 		self.__mSensor = TemperatureIO.TemperatureIO()
 		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
+		self.__mSaveTime = saveTime
+		LOG.INFO(__name__, "save time[{}]".format(self.__mSaveTime))
 
 		# save判定スレッド生成
 		self.__mJudgeSaveThread = threading.Thread(target=self.__executeJudgeSave)

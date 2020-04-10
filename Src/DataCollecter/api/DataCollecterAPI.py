@@ -12,6 +12,11 @@ class DataCollecterAPI(object):
 	def __del__(self):
 		pass
 
+	# 同期API
+	def getMachineValue(self):
+		value = self.__mMain.getParameter()
+		return value
+
 	def setTemperature(self, value, isSave):
 		LOG.INFO(__name__, "DATA_CMD_SET_TEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_TEMP, [value, isSave])
@@ -31,6 +36,10 @@ class DataCollecterAPI(object):
 	def setPicture(self, fileName):
 		LOG.INFO(__name__, "DATA_CMD_SET_PICTURE.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_PICTURE, [fileName])
+
+	def setColor(self, r, g, b):
+		LOG.INFO(__name__, "DATA_CMD_SET_COLOR.")
+		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_COLOR, [r, g, b])
 
 	def registerChangeTemprature(self, cb):
 		LOG.INFO(__name__, "DATA_CMD_REG_CHANGETEMP.")

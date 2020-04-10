@@ -3,6 +3,7 @@
 import time
 import threading
 from . import CameraIO
+from . import ImageRecognition
 from . import CameraCmd as Cmd
 import LogPrint as LOG
 import Semaphore
@@ -14,13 +15,15 @@ class CameraMain(threading.Thread):
 	__mParam	= []
 	__mDataCtr	= None
 	__mIo		= None
-	__mSem	= None
+	__mSem		= None
+	__mRecog	= None
 
 	def __init__(self, dataObj):
 		threading.Thread.__init__(self)
 		self.__mDataApi = dataObj
 		self.__mIo = CameraIO.CameraIO()
 		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
+		self.__mRecog = ImageRecognition.ImageRecognition()
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
@@ -52,7 +55,10 @@ class CameraMain(threading.Thread):
 			result, fileName = self.__mIo.execute()
 			if result == True:
 				param[0](fileName)
-				print("-----> ", fileName[fileName.rfind('/') + 1:])
+
+				# 画像の色を判別
+				r, g, b = self.__mRecog.execute(fileName)
+				self.__mDataApi.setColor(r, g, b)
 				self.__mDataApi.setPicture(fileName[fileName.rfind('/') + 1:])
 				
 		else:

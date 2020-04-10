@@ -33,6 +33,7 @@ class SQLController(object):
 			conect.close()
 		except:
 			print("[Error] sql wite error.[", sql, "]")
+			print("[Error] sql data.[", data, "]")
 			return False, None
 		
 		return True, fet

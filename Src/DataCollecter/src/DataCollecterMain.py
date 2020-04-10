@@ -15,11 +15,15 @@ class DataCollecterMain(threading.Thread):
 	__mRegGetTempCb = []
 	__mRegGetHumidityCb = []
 	__mSem	= None
+	__mSetValue = None
 
 	def __init__(self):
 		threading.Thread.__init__(self)
 		self.__mProc = DataCollecterProcess.DataCollecterProcess()
 		self.__mSem = Semaphore.Semaphore(DEF_MYNAME)
+
+		# 各設定値を取得する
+		self.__mSetValue = self.__mProc.getSettingData()
 
 	def run(self):
 		LOG.INFO(__name__, "Thread start. [{}]".format(hex(id(self))))
@@ -33,6 +37,12 @@ class DataCollecterMain(threading.Thread):
 		self.__mCommand.append(cmd)
 		self.__mParam.append(param)
 		self.__mSem.unlock()
+
+	def getParameter(self):
+		if self.__mSetValue == None:
+			LOG.ERROR(__name__, "__mSetValue is Error.")
+
+		return self.__mSetValue
 
 	def __executeCommand(self):
 		if len(self.__mCommand) == 0:
@@ -48,6 +58,8 @@ class DataCollecterMain(threading.Thread):
 			quit()
 
 		elif cmd == Cmd.DATA_CMD_SET_TEMP:	# 温度格納
+			self.__mProc.updateTemperature(param[0])
+			
 			isSave = param[1]
 			if isSave == True:
 				self.__mProc.setTemperature(param[0])
@@ -60,10 +72,12 @@ class DataCollecterMain(threading.Thread):
 			param[0](value)
 
 		elif cmd == Cmd.DATA_CMD_SET_HUMID:	# 湿度格納
+			self.__mProc.updateHumidity(param[0])
+
 			isSave = param[1]
 			if isSave == True:
 				self.__mProc.setHumidity(param[0])
-				
+
 			for cbFunc in self.__mRegGetHumidityCb:
 				cbFunc(param[0])
 
@@ -74,6 +88,10 @@ class DataCollecterMain(threading.Thread):
 		elif cmd == Cmd.DATA_CMD_SET_PICTURE: # 画像格納
 			fileName = param[0]
 			self.__mProc.setPicture(fileName)
+
+		elif cmd == Cmd.DATA_CMD_SET_COLOR:	# 色格納
+			self.__mProc.setColor(param[0], param[1], param[2])
+			self.__mProc.updateGrowth(param[0], param[1], param[2])
 
 		elif cmd == Cmd.DATA_CMD_REG_CHANGETEMP:
 			self.__mRegGetTempCb.append(param[0])

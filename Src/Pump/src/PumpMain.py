@@ -48,7 +48,7 @@ class PumpMain(threading.Thread):
 			quit()
 
 		elif cmd == Cmd.PUMP_CMD_EXECUTE:
-			self.__executePump(int(param[0]))
+			self.__executePump(float(param[0]))
 
 		else:
 			print("Cmd Error.")

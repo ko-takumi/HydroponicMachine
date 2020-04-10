@@ -3,16 +3,16 @@
 import requests
 import LogPrint as LOG
 SUCCESS_NUM = "<Response [200]>"
-DEF_TOKEN = 'xxxx'
 DEF_API = 'https://notify-api.line.me/api/notify'
 
 class LineNotify(object):
 	__mToken = ""
 	__mApi = ""
 
-	def __init__(self):
-		self.__mToken = DEF_TOKEN
+	def __init__(self, token):
+		self.__mToken = token
 		self.__mApi = DEF_API
+		LOG.INFO(__name__, "token[{}]".format(self.__mToken))
 
 	def sentMessage(self, subject, text):
 		LOG.INFO(__name__, "send[{}]".format(text))

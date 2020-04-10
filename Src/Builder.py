@@ -9,6 +9,9 @@ from Pump.src import PumpMain
 from Camera.src import CameraMain
 from Lamp.src import LampMain
 
+from MainController import MainController
+from MenuController import MenuController
+
 class Builder(object):
 	__mInstance				= None
 	__mTemperatureThread	= None
@@ -18,6 +21,8 @@ class Builder(object):
 	__mPumpThread			= None
 	__mCameraThread			= None
 	__mLampThread			= None
+	__mMainThread			= None
+	__mMenuThread			= None
 
 	__mDataCollecterAPI		= None
 
@@ -30,10 +35,13 @@ class Builder(object):
 		return self.__mInstance
 
 	def __create(self):
+		# 順番性あり
+		# DataCollectoreTread -> DataCollecterAPIとすること
 		self.__mDataCollecterThread	= DataCollecterMain.DataCollecterMain()
 		self.__mDataCollecterAPI	= DataCollecterAPI.DataCollecterAPI()
+		param = self.__mDataCollecterAPI.getMachineValue()
 
-		self.__mTemperatureThread	= TemperatureMain.TemperatureMain(self.__mDataCollecterAPI)
+		self.__mTemperatureThread	= TemperatureMain.TemperatureMain(self.__mDataCollecterAPI, param['temperatureSaveTime'])
 		self.__mSwitchThread		= SwitchMain.SwitchMain()
 		self.__mDisplayThread		= DisplayMain.DisplayMain(self.__mDataCollecterAPI)
 		self.__mPumpThread			= PumpMain.PumpMain()
@@ -43,9 +51,13 @@ class Builder(object):
 		# CBクラス作成
 		self.__mDisplayCb	= DisplayCb.DisplayCb(self.__mDisplayThread)
 
+		# main, menu作成
+		self.__mMainThread = MainController.MainController(param['photoTime'], param['plantManagemntTime'], param['notifyTime'], param['warteringTime'], param['lineToken'])
+		self.__mMenuThread = MenuController.MenuController()
+
 	def getThreads(self):
 		threadList =	[self.__mTemperatureThread, self.__mDataCollecterThread, self.__mSwitchThread, 
-						 self.__mDisplayThread, self.__mPumpThread, self.__mCameraThread, self.__mLampThread]
+						 self.__mDisplayThread, self.__mPumpThread, self.__mCameraThread, self.__mLampThread, self.__mMainThread, self.__mMenuThread]
 		if None in threadList:
 			print("[ERROR]thread is None.")
 			return None
