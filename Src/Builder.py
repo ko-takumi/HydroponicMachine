@@ -56,8 +56,12 @@ class Builder(object):
 		self.__mMenuThread = MenuController.MenuController()
 
 	def getThreads(self):
-		threadList =	[self.__mTemperatureThread, self.__mDataCollecterThread, self.__mSwitchThread, 
-						 self.__mDisplayThread, self.__mPumpThread, self.__mCameraThread, self.__mLampThread, self.__mMainThread, self.__mMenuThread]
+		threadList =	[self.__mTemperatureThread, self.__mSwitchThread, 
+						 self.__mDisplayThread, self.__mPumpThread, 
+						 self.__mCameraThread, self.__mLampThread, 
+						 self.__mMainThread, self.__mMenuThread, 
+						 self.__mDataCollecterThread]
+						 
 		if None in threadList:
 			print("[ERROR]thread is None.")
 			return None

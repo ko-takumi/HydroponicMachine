@@ -17,6 +17,7 @@ class DataCollecterAPI(object):
 		value = self.__mMain.getParameter()
 		return value
 
+	# 非同期API
 	def setTemperature(self, value, isSave):
 		LOG.INFO(__name__, "DATA_CMD_SET_TEMP.")
 		self.__mMain.notifyCommand(Cmd.DATA_CMD_SET_TEMP, [value, isSave])
