@@ -59,6 +59,7 @@ class DataCollecterProcess(object):
 		addId += 1
 
 		history = datetime.datetime.now()
+		history = history.strftime("%Y/%m/%dT%H:%M:%S")
 		sql = "INSERT INTO Hydroponic_temperatureLog (id, history, temperature) VALUES (?, ?, ?)"
 		data = (addId, history, value)
 		result, dummy = self.__mSqlCtr.execute(sql, data)
@@ -98,6 +99,7 @@ class DataCollecterProcess(object):
 		addId += 1
 
 		history = datetime.datetime.now()
+		history = history.strftime("%Y/%m/%dT%H:%M:%S")
 		sql = "INSERT INTO Hydroponic_humidityLog (id, history, humidity) VALUES (?, ?, ?)"
 		#history = '{}'.format(history)
 		data = (addId, history, value)
@@ -138,6 +140,7 @@ class DataCollecterProcess(object):
 		addId += 1
 
 		history = datetime.datetime.now()
+		history = history.strftime("%Y/%m/%dT%H:%M:%S")
 		sql = "INSERT INTO Hydroponic_pictureLog (id, history, fileName) VALUES (?, ?, ?)"
 		data = (addId, history, fileName)
 		result, dummy = self.__mSqlCtr.execute(sql, data)
@@ -153,6 +156,7 @@ class DataCollecterProcess(object):
 		addId += 1
 
 		history = datetime.datetime.now()
+		history = history.strftime("%Y/%m/%dT%H:%M:%S")
 		sql = "INSERT INTO Hydroponic_colorLog (id, history, red, green, blue) VALUES (?, ?, ?, ?, ?)"
 		r = '{:.5g}'.format(r)
 		g = '{:.5g}'.format(g)
